@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Assignment 2</title>
+    <script>
+        moveTimer = null
+        stepNumber = 0
+
+        // step function
+        function stepRight()
+        {
+            stepNumber = stepNumber + 1
+
+            if(stepNumber > 30)
+            {
+                stepNumber = 0
+            }
+
+            alien.src = "./alien/alienrwalk" + stepNumber + ".gif"
+        }
+
+        function stepLeft()
+        {
+            stepNumber = stepNumber + 1
+
+            if(stepNumber > 30)
+            {
+                stepNumber = 0
+            }
+
+            alien.src = "./alien/alienlwalk" + stepNumber + ".gif"
+        }
+        
+
+        // move function
+        function moveRight()
+        {
+            alien.style.left = parseInt(alien.style.left) + 1 + "px"
+            stepRight()
+        }
+
+        function moveLeft()
+        {
+            alien.style.left = parseInt(alien.style.left) - 1 + "px"
+            stepLeft()
+        }
+
+        function stopMoving()
+        {
+            if(moveTimer != null)
+            {
+                clearInterval(moveTimer)
+                moveTimer = null
+            }
+        }
+
+
+        // assign arrow key
+        function handlekeyDown(e)
+        {
+            // Question 9
+            if(e.which == 39) 
+            {
+                if(moveTimer == null)
+                {
+                    moveTimer = setInterval(moveRight, 20)
+                }
+            }
+
+            // Question 10
+            else if(e.which == 37)
+            {
+                if(moveTimer == null)
+                {
+                    moveTimer = setInterval(moveLeft, 20)
+                }
+            }
+            
+            // Question 11
+            else if(e.which = 40)
+            {
+                stopMoving()
+            }
+        }
+
+        window.onload = function()
+        {
+            alien = document.getElementById("al")
+            window.onkeydown = handlekeyDown
+        }
+    </script>
+</head>
+<body>
+    <img src="./alien/alienrwalk0.gif" id="al" style="position: absolute;left: 10px; top: 300px;">
+</body>
+</html>
