@@ -1,96 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Assignment 2</title>
     <script>
         moveTimer = null
-        stepNumber = 0
+        stepNumber = 0 
+        boxTimer = null
+        walkingLeft = false
+        walkingRight = true
 
         // step function
         function stepRight()
         {
             stepNumber = stepNumber + 1
-
             if(stepNumber > 30)
             {
                 stepNumber = 0
             }
-
             alien.src = "./alien/alienrwalk" + stepNumber + ".gif"
         }
-
         function stepLeft()
         {
             stepNumber = stepNumber + 1
-
             if(stepNumber > 30)
             {
                 stepNumber = 0
             }
-
             alien.src = "./alien/alienlwalk" + stepNumber + ".gif"
         }
-        
 
         // move function
         function moveRight()
         {
             alien.style.left = parseInt(alien.style.left) + 1 + "px"
             stepRight()
+            kickedRight()
+            walkingRight = true
+            walkingLeft = false
         }
-
         function moveLeft()
         {
             alien.style.left = parseInt(alien.style.left) - 1 + "px"
             stepLeft()
+            kickedLeft()
+            walkingLeft = true
+            walkingRight = false
         }
 
-        function stopMoving()
+        // jump function
+        function jumpRight()
+        {
+            walkingRight = true
+            walkingLeft = false
+            moveTimer = setInterval(function(){
+                alien.style.top = parseInt(alien.style.top) - 2 + 'px'
+                alien.style.left = parseInt(alien.style.left) + 1 + 'px'
+            }, 20)
+            setTimeout(function(){
+                clearInterval(moveTimer)
+                moveTimer = null
+                moveTimer = setInterval(function(){
+                    alien.style.top = parseInt(alien.style.top) + 2 + 'px'
+                    alien.style.left = parseInt(alien.style.left) + 1 + 'px'
+                }, 20)
+                setTimeout(function(){
+                    clearInterval(moveTimer)
+                    moveTimer = null
+                    if(alien.offsetLeft >= lilBox.offsetLeft - 65)
+                    {
+                        if(lilBox.offsetLeft > alien.offsetLeft)
+                        {
+                            explosion()
+                        }
+                    }
+                }, 500)
+            }, 500)
+        }
+        function jumpLeft()
+        {
+            walkingLeft = true
+            walkingRight = false
+            moveTimer = setInterval(function(){
+                alien.style.top = parseInt(alien.style.top) - 2 + 'px'
+                alien.style.left = parseInt(alien.style.left) - 1 + 'px'
+            }, 20)
+            setTimeout(function(){
+                clearInterval(moveTimer)
+                moveTimer = null
+                moveTimer = setInterval(function(){
+                    alien.style.top = parseInt(alien.style.top) + 2 + 'px'
+                    alien.style.left = parseInt(alien.style.left) - 1 + 'px'
+                }, 20)
+                setTimeout(function(){
+                    clearInterval(moveTimer)
+                    moveTimer = null
+                    if(alien.offsetLeft >= lilBox.offsetLeft -20 && alien.offsetLeft <= lilBox.offsetLeft + 20)
+                    {
+                        console.log('1 correct')
+                        console.log(alien.offsetLeft)
+                        console.log(lilBox.offsetLeft)
+
+                        // if(lilBox.offsetLeft -5 > alien.offsetLeft)
+                        // {
+                            console.log('2 correct')
+                            explosion()
+                        // }
+                    }
+                }, 500)
+            }, 500)
+        }
+
+        function stopMoving() // Question 11
         {
             if(moveTimer != null)
             {
-                clearInterval(moveTimer)
-                moveTimer = null
+                if(alien.style.top == '300px') // Question 3
+                {
+                    clearInterval(moveTimer)
+                    moveTimer = null 
+                }
             }
         }
 
+        function explosion() //Question 8
+        {
+            lilBox.src = "alien/explosion.gif"
+            lilBox.style.top = "200px"
+            lilBox.style.left = parseInt(lilBox.style.left) - 50 + "px"
+            setTimeout(function(){
+                lilBox.style.visibility = "hidden"
+            }, 1250)
+        }
+
+        // kick box functions (Question 7)
+        function kickedRight()
+        {
+            if(alien.offsetLeft >= lilBox.offsetLeft - 65)
+            {
+                if(lilBox.offsetLeft - 64 > alien.offsetLeft)
+                {
+                    boxTimer = setInterval(boxSlidingRight, 20)
+                    setTimeout(function(){
+                        clearInterval(boxTimer)
+                        boxTimer = null
+                    }, 750)
+                }
+            }
+        }
+        function kickedLeft()
+        {
+            if(alien.offsetLeft <= lilBox.offsetLeft + 10)
+            {
+                if(lilBox.offsetLeft + 9 < alien.offsetLeft)
+                {
+                    boxTimer = setInterval(boxSlidingLeft, 20)
+                    setTimeout(function(){
+                        clearInterval(boxTimer)
+                        boxTimer = null
+                    }, 750)
+                }
+            }
+        }
+        function boxSlidingRight()
+        {
+            lilBox.style.left = parseInt(lilBox.style.left) + 5 + "px"
+        }
+        function boxSlidingLeft()
+        {
+            lilBox.style.left = parseInt(lilBox.style.left) - 5 + "px"
+        }
 
         // assign arrow key
         function handlekeyDown(e)
         {
-            // Question 9
-            if(e.which == 39) 
+            if(e.which == 39)  // Question 9 (right arrow)
             {
                 if(moveTimer == null)
                 {
                     moveTimer = setInterval(moveRight, 20)
                 }
             }
-
-            // Question 10
-            else if(e.which == 37)
+            else if(e.which == 37)  // Question 10 (left arrow)
             {
                 if(moveTimer == null)
                 {
                     moveTimer = setInterval(moveLeft, 20)
                 }
             }
-            
-            // Question 11
-            else if(e.which = 40)
+            else if(e.which == 40)  // Question 11 (down arrow)
             {
                 stopMoving()
             }
+            else if(e.which == 38) // Question 2 (up arrow)
+            {
+                if(alien.style.top == '300px')
+                {
+                    clearInterval(moveTimer)
+                    moveTimer = null
+
+                    if(walkingRight == true)
+                    {
+                        console.log('jumpin right')
+                        jumpRight()
+                    }
+                    if(walkingLeft == true)
+                    {
+                        console.log('jumpin left')
+                        jumpLeft()
+                    }
+                }
+            }
         }
+
 
         window.onload = function()
         {
             alien = document.getElementById("al")
+            lilBox = document.getElementById('lilBox')
             window.onkeydown = handlekeyDown
         }
     </script>
 </head>
 <body>
-    <img src="./alien/alienrwalk0.gif" id="al" style="position: absolute;left: 10px; top: 300px;">
+    <img src="./alien/alienrwalk0.gif" id="al" style="position: absolute;left: 300px; top: 300px;">
+    <img src="alien/little_box.png" id="lilBox" style="position: absolute; left: 200px; top: 345px;">
 </body>
 </html>
