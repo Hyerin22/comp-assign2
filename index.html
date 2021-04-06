@@ -37,9 +37,13 @@
             stepRight()
             kickedRight()
             turnAroundToLeft()
-            // meetBigBoxRight()
             walkingRight = true
             walkingLeft = false
+
+            if(alien.offsetLeft < bigBox.offsetLeft)
+            {
+                meetBigBoxRight()
+            }
             
         }
         function moveLeft()
@@ -48,9 +52,13 @@
             stepLeft()
             kickedLeft()
             turnAroundToRight()
-            meetBigBoxLeft()
             walkingLeft = true
             walkingRight = false
+            
+            if(alien.offsetLeft > bigBox.offsetLeft)
+            {
+                meetBigBoxLeft()
+            }
 
         }
 
@@ -265,8 +273,8 @@
     </script>
 </head>
 <body>
-    <img src="./images/alienrwalk0.gif" alt="alien" id="al" style="position: absolute;left: 700px; top: 300px;">
-    <img src="images/little_box.gif" alt="little box" id="lilBox" style="position: absolute; left: 300px; top: 345px;">
-    <img src="images/big_box.gif" alt="big box" id="bigBox" style="position: absolute; left: 600px; top: 330px;">
+    <img src="./images/alienrwalk0.gif" alt="alien" id="al" style="position: absolute;left: 200px; top: 300px;">
+    <img src="images/little_box.gif" alt="little box" id="lilBox" style="position: absolute; left: 400px; top: 345px;">
+    <img src="images/big_box.gif" alt="big bo" id="bigBox" style="position: absolute; left: 100px; top: 330px;">
 </body>
 </html>
